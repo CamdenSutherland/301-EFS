@@ -1,0 +1,4 @@
+qemu-system-i386 -m 64M -net nic,model=ne2k_pci -net user,hostfwd=tcp::2021-10.0.2.15:21 -hda <Your minix image>/minix.img -hdb HDD2.img 
+
+in minix to mount the second drive
+mount /dev/c0d1 <folder>
