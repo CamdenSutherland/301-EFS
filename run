@@ -1,0 +1,37 @@
+#!/bin/bash
+
+hda=""
+hdb=""
+
+while [ "$1" != "" ]
+do
+  case "$1" in
+    "-hda")
+      shift
+      hda=$1
+      ;;
+    "-hdb")
+      shift
+      hdb=$1
+      ;;
+    "-help")
+      echo "./run -hda <minix.img> -hdb <second drive>"
+      exit
+      ;;
+    *)
+      echo "Error check help"
+      exit
+      ;;
+  esac
+  shift
+done
+
+ta=$([ -f "$hda" ] && echo 1 || echo 0)
+tb=$([ -f "$hdb" ] && echo 1 || echo 0)
+if [ "$ta" == 0 ] || [ "$tb" == 0 ]
+then
+  echo "Error File dose not exist"
+  exit
+fi
+qemu-system-i386 -m 64M -net nic,model=ne2k_pci -net user,hostfwd=tcp::2021-10.0.2.15:21 -hda "$hda" -hdb "$hdb" 
+
