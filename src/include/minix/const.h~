@@ -109,7 +109,6 @@
 #define W_BIT           0000002	/* rWx protection bit */
 #define X_BIT           0000001	/* rwX protection bit */
 #define I_NOT_ALLOC     0000000	/* this inode is free */
-#define I_ENCRYPTED		0001000 /* this inode is encrypted*/
 
 /* Flag used only in flags argument of dev_open. */
 #define RO_BIT		0200000	/* Open device readonly; fail if writable. */
