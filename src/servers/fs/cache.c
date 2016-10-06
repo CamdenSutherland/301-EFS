@@ -21,6 +21,17 @@
 
 FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) );
 
+PUBLIC void encrypt(char *data)
+{
+  printf("WRITING: DATA:'%s'\n",data);
+}
+
+PUBLIC void decrypt(char *data)
+{
+
+  printf("READING: DATA:'%s'\n",data);
+}
+
 /*===========================================================================*
  *				get_block				     *
  *===========================================================================*/
@@ -47,7 +58,9 @@ int only_search;		/* if NO_READ, don't read, else act normal */
   int b;
   register struct buf *bp, *prev_ptr;
 
-  /* Search the hash chain for (dev, block). Do_read() can use 
+
+
+  /* Search the hash chain for (dev, block). Do_read() can use
    * get_block(NO_DEV ...) to get an unnamed block to fill with zeros when
    * someone wants to read from a hole in a file, in which case this search
    * is skipped
@@ -58,9 +71,20 @@ int only_search;		/* if NO_READ, don't read, else act normal */
 	while (bp != NIL_BUF) {
 		if (bp->b_blocknr == block && bp->b_dev == dev) {
 			/* Block needed has been found. */
-			if (bp->b_count == 0) rm_lru(bp);
-			bp->b_count++;	/* record that block is in use */
-
+			if (bp->b_count == 0)
+      {
+        rm_lru(bp);
+			  bp->b_count++;	/* record that block is in use */
+        if(bp->b_dev == 773)
+        {
+          printf("READING: Minor:%d\tblock:%d\tb:%d\n",(bp->b_dev>>MINOR)&BYTE,block,b);
+          decrypt(bp->b.b__data);
+        }
+      }
+      else
+      {
+        bp->b_count++;	/* record that block is in use */
+      }
 			return(bp);
 		} else {
 			/* This block is not the one sought. */
@@ -129,6 +153,7 @@ PUBLIC void put_block(bp, block_type)
 register struct buf *bp;	/* pointer to the buffer to be released */
 int block_type;			/* INODE_BLOCK, DIRECTORY_BLOCK, or whatever */
 {
+  static int print = 0;
 /* Return a block to the list of available blocks.   Depending on 'block_type'
  * it may be put on the front or rear of the LRU chain.  Blocks that are
  * expected to be needed again shortly (e.g., partially full data blocks)
@@ -137,10 +162,22 @@ int block_type;			/* INODE_BLOCK, DIRECTORY_BLOCK, or whatever */
  * the integrity of the file system (e.g., inode blocks) are written to
  * disk immediately if they are dirty.
  */
+  /*if(bp->b_dev != 898 && bp->b_dev != 896)
+  {
+    printf("device: %d\t,%d\n",bp->b_dev,(bp->b_dev>>MINOR)&BYTE);
+  }*/
   if (bp == NIL_BUF) return;	/* it is easier to check here than in caller */
 
   bp->b_count--;		/* there is one use fewer now */
   if (bp->b_count != 0) return;	/* block is still in use */
+  else if (bp->b_count == 0)
+  {
+    if(bp->b_dev == 773 && block_type == 6)
+    {
+      printf("WRITING: Minor:%d\tblock_type:%d\n",(bp->b_dev>>MINOR)&BYTE,block_type);
+      encrypt(bp->b.b__data);
+    }
+  }
 
   bufs_in_use--;		/* one fewer block buffers in use */
 
@@ -179,7 +216,7 @@ int block_type;			/* INODE_BLOCK, DIRECTORY_BLOCK, or whatever */
    */
   if ((block_type & WRITE_IMMED) && bp->b_dirt==DIRTY && bp->b_dev != NO_DEV) {
 		rw_block(bp, WRITING);
-  } 
+  }
 }
 
 /*===========================================================================*
@@ -358,7 +395,7 @@ int rw_flag;			/* READING or WRITING */
 
   /* Set up I/O vector and do I/O.  The result of dev_io is OK if everything
    * went fine, otherwise the error code for the first failed transfer.
-   */  
+   */
   while (bufqsize > 0) {
 	for (j = 0, iop = iovec; j < NR_IOREQS && j < bufqsize; j++, iop++) {
 		bp = bufq[j];

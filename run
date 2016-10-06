@@ -14,23 +14,28 @@ do
       shift
       hdb=$1
       ;;
-    "-help")
+    "-help" | "-h" | "--help")
       echo "./run -hda <minix.img> -hdb <second drive>"
       exit
       ;;
     *)
-      echo "Error check help"
+      echo "Type ./run -help"
       exit
       ;;
   esac
   shift
 done
-
-ta=$([ -f "$hda" ] && echo 1 || echo 0)
-tb=$([ -f "$hdb" ] && echo 1 || echo 0)
-if [ "$ta" == 0 ] || [ "$tb" == 0 ]
+if [ "$hda" == "hgay1" ]
 then
-  echo "Error File dose not exist"
+  hda="/vm/cs-301b/hgay1/minix.img"
+fi
+ta=$([ -f "$hda" ] && echo "Found" || echo "Not Found")
+tb=$([ -f "$hdb" ] && echo "Found" || echo "Not Found")
+if [ "$ta" == "Not Found" ] || [ "$tb" == "Not Found" ]
+then
+  echo "One of the files dose not exist"
+  echo "hda: $ta"
+  echo "hdb: $tb"
   exit
 fi
 qemu-system-i386 -m 64M -net nic,model=ne2k_pci -net user,hostfwd=tcp::2021-10.0.2.15:21 -hda "$hda" -hdb "$hdb" 

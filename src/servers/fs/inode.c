@@ -203,7 +203,7 @@ register struct inode *rip;	/* pointer to inode to be read/written */
 /* Various system calls are required by the standard to update atime, ctime,
  * or mtime.  Since updating a time requires sending a message to the clock
  * task--an expensive business--the times are marked for update by setting
- * bits in i_update.  When a stat, fstat, or sync is done, or an inode is 
+ * bits in i_update.  When a stat, fstat, or sync is done, or an inode is
  * released, update_times() may be called to actually fill in the times.
  */
 
@@ -258,7 +258,7 @@ int rw_flag;			/* READING or WRITING */
 	old_icopy(rip, dip,  rw_flag, sp->s_native);
   else
 	new_icopy(rip, dip2, rw_flag, sp->s_native);
-  
+
   put_block(bp, INODE_BLOCK);
   rip->i_dirt = CLEAN;
 }
