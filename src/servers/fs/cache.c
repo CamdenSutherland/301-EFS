@@ -19,17 +19,34 @@
 #include "fproc.h"
 #include "super.h"
 
-FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) );
 
+FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) );
+static int key = 6994;
 PUBLIC void encrypt(char *data)
 {
-  printf("WRITING: DATA:'%s'\n",data);
+  int i = 0;
+  int len = strlen(data);
+  printf("ENCRYPTING DATA:'%s'\n",data);
+  /*while(i<len)
+  {
+    data[i] = data[i] ^ key;
+    data[i] = data[i] + 1;
+    i++;
+  }*/
 }
 
 PUBLIC void decrypt(char *data)
 {
+  int i = 0;
+  int len = strlen(data);
+  printf("DECRYPTING DATA:'%s'\n",data);
+  /*while(i<len)
+  {
+    data[i] = data[i] - +1;
+    data[i] = data[i] ^ key;
+    i++;
+  }*/
 
-  printf("READING: DATA:'%s'\n",data);
 }
 
 /*===========================================================================*
