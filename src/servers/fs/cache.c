@@ -26,21 +26,21 @@ PUBLIC void encrypt(char *data, int key)
 {
   int i = 0;
   int len = strlen(data);
-  printf("Encrytping Data:\n\tInput :%s\n",data);
+  /*printf("Encrytping Data:\n\tInput :%s\n",data);*/
   while(i<len)
   {
     data[i] = data[i] ^ key;
     data[i] = data[i] + 1;
     i++;
   }
-  printf("\tOutput:%s\n",data);
+  /*printf("\tOutput:%s\n",data);*/
 }
 
 PUBLIC void decrypt(char *data, int key)
 {
   int i = 0;
   int len = strlen(data);
-  printf("DECRYPTING DATA:\n\tInput :%s\n",data);
+  /*printf("DECRYPTING DATA:\n\tInput :%s\n",data);*/
   
   while(i<len)
   {
@@ -48,7 +48,7 @@ PUBLIC void decrypt(char *data, int key)
     data[i] = data[i] ^ key;
     i++;
   }
-  printf("\tOutput:%s\n",data);
+  /*printf("\tOutput:%s\n",data);*/
 
 }
 
@@ -106,7 +106,7 @@ int only_search;		/* if NO_READ, don't read, else act normal */
 			  	
         		if(bp->b_dev == 773 && block >firstDZ)
         		{
-          			printf("READING: Minor:%d\tblock:%d\tb:%d\n",(bp->b_dev>>MINOR)&BYTE,block,b);
+          			/*printf("READING: Minor:%d\tblock:%d\tb:%d\n",(bp->b_dev>>MINOR)&BYTE,block,b);*/
           			decrypt(bp->b.b__data, encryptkey);
         		}
       		}
@@ -222,9 +222,8 @@ int block_type;			/* INODE_BLOCK, DIRECTORY_BLOCK, or whatever */
 	}
     if(bp->b_dev == 773 && block_type == 6 && bp->b_blocknr > firstDZ && bp->fc == 1)
     {
-      printf("WRITING: Minor:%d\tblock_type:%d\tblock_number:%d\n",(bp->b_dev>>MINOR)&BYTE,block_type,bp->b_blocknr);
+      /*printf("WRITING: Minor:%d\tblock_type:%d\tblock_number:%d\n",(bp->b_dev>>MINOR)&BYTE,block_type,bp->b_blocknr);*/
       bp->fc = 0;
-      printf("Enc Key:%d\n",encryptkey);
       encrypt(bp->b.b__data, encryptkey);
     }
   }

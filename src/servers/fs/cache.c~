@@ -106,7 +106,6 @@ int only_search;		/* if NO_READ, don't read, else act normal */
 			  	
         		if(bp->b_dev == 773 && block >firstDZ)
         		{
-        		
           			printf("READING: Minor:%d\tblock:%d\tb:%d\n",(bp->b_dev>>MINOR)&BYTE,block,b);
           			decrypt(bp->b.b__data, encryptkey);
         		}

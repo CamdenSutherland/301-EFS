@@ -33,7 +33,6 @@ char *argv[];
   char special[PATH_MAX+1], mounted_on[PATH_MAX+1], version[10], rw_flag[10];
   int key;
   char encrypted;
-  int loop = 0;
 
   if (argc == 1) list();	/* just list /etc/mtab */
   ro = 0;
@@ -64,7 +63,6 @@ char *argv[];
   } else {
 	if (argc != 3) usage();
 	while (1){
-		printf("loop:%d",loop);
 		printf("Is this drive encrypted? (y/n): ");
 		fflush(stdin);
 		scanf("%s", &encrypted);
@@ -82,7 +80,6 @@ char *argv[];
 		else if (encrypted == 'n'){
 			break;
 		}
-		loop++;
     }
     printf("\n");
 	if (encrypted == 'y'){
