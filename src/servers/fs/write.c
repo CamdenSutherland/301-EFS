@@ -26,7 +26,6 @@ FORWARD _PROTOTYPE( void wr_indir, (struct buf *bp, int index, zone_t zone) );
 PUBLIC int do_write()
 {
 /* Perform the write(fd, buffer, nbytes) system call. */
-
   return(read_write(WRITING));
 }
 

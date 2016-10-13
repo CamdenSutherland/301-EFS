@@ -149,6 +149,7 @@ _PROTOTYPE( int mknod4, (const char *_name, _mnx_Mode_t _mode, Dev_t _addr,
 	    long _size)							);
 _PROTOTYPE( char *mktemp, (char *_template)				);
 _PROTOTYPE( int mount, (char *_spec, char *_name, int _flag)		);
+_PROTOTYPE( int mounte, (char *_spec, char *_name, int _flag, int _key)		);
 _PROTOTYPE( long ptrace, (int _req, pid_t _pid, long _addr, long _data)	);
 _PROTOTYPE( char *sbrk, (int _incr)					);
 _PROTOTYPE( int sync, (void)						);

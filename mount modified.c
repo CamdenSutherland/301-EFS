@@ -15,6 +15,7 @@
 #include <sys/svrctl.h>
 #include <stdio.h>
 #include "../../servers/fs/const.h"
+#include "../../servers/fs/super.h"
 
 _PROTOTYPE(int main, (int argc, char **argv));
 _PROTOTYPE(void list, (void));
@@ -32,8 +33,7 @@ char *argv[];
   char **ap, *vs, *opt, *err;
   char special[PATH_MAX+1], mounted_on[PATH_MAX+1], version[10], rw_flag[10];
   int key;
-  char encrypted;
-  int loop = 0;
+
 
   if (argc == 1) list();	/* just list /etc/mtab */
   ro = 0;
@@ -43,7 +43,7 @@ char *argv[];
 	if (argv[i][0] == '-') {
 		opt = argv[i]+1;
 		while (*opt != 0) switch (*opt++) {
-		case 'r':	ro = 1;	 	break;
+		case 'r':	ro = 1;		break;
 		case 's':	swap = 1;	break;
 		default:	usage();
 		}
@@ -63,53 +63,16 @@ char *argv[];
 	tell(" is swapspace\n");
   } else {
 	if (argc != 3) usage();
-	while (1){
-		printf("loop:%d",loop);
-		printf("Is this drive encrypted? (y/n): ");
-		fflush(stdin);
-		scanf("%s", &encrypted);
-		if (encrypted == 'y'){
-			while(1){
-		  		printf("Enter encryption key (int): ");
-		  		fflush(stdin);
-		  		if (scanf("%d",&key) == 1){
-					printf("Encryption key is: %d",key);
-					break;
-				}
-			}
-			break;
-		}
-		else if (encrypted == 'n'){
-			break;
-		}
-		loop++;
-    }
-    printf("\n");
-	if (encrypted == 'y'){
-		if (mounte(argv[1], argv[2], ro, key) < 0) {
-			err = strerror(errno);
-			std_err("mount: Can't mount ");
-			std_err(argv[1]);
-			std_err(" on ");
-			std_err(argv[2]);
-			std_err(": ");
-			std_err(err);
-			std_err("\n");
-			exit(1);
-		}
-	}
-	else{
-		if (mount(argv[1], argv[2], ro) < 0) {
-			err = strerror(errno);
-			std_err("mount: Can't mount ");
-			std_err(argv[1]);
-			std_err(" on ");
-			std_err(argv[2]);
-			std_err(": ");
-			std_err(err);
-			std_err("\n");
-			exit(1);
-		}
+	if (mount(argv[1], argv[2], ro) < 0) {
+		err = strerror(errno);
+		std_err("mount: Can't mount ");
+		std_err(argv[1]);
+		std_err(" on ");
+		std_err(argv[2]);
+		std_err(": ");
+		std_err(err);
+		std_err("\n");
+		exit(1);
 	}
 	/* The mount has completed successfully. Tell the user. */
 	tell(argv[1]);
@@ -118,8 +81,19 @@ char *argv[];
 	tell(" mounted on ");
 	tell(argv[2]);
 	tell("\n");
-	
-	
+	printf("Device Mounted: Please Enter the Encryption Key\n");
+    		
+    		scanf("%d",&key);
+      		printf("Encryption key is: %d",key);
+      		/*
+	for (p = 0; p < NR_SUPERS; p++){
+		if(super_block[p].s_dev == 773){
+    		printf("Device Mounted: Please Enter the Encryption Key\n");
+    		
+    		scanf("%d",&key);
+      		printf("Encryption key is: %d",key);
+		}
+	}*/
   }
 
   /* Update /etc/mtab. */

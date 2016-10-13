@@ -88,7 +88,7 @@ char *argv[];
 	if (encrypted == 'y'){
 		if (mounte(argv[1], argv[2], ro, key) < 0) {
 			err = strerror(errno);
-			std_err("mount: Can't mount ");
+			std_err("mounte: Can't mount ");
 			std_err(argv[1]);
 			std_err(" on ");
 			std_err(argv[2]);

@@ -326,6 +326,10 @@ int *completed;			/* number of bytes copied */
 	bp->b_dirt = DIRTY;
   }
   n = (off + chunk == block_size ? FULL_DATA_BLOCK : PARTIAL_DATA_BLOCK);
+  if(bp->b_dev == 773)
+  {
+    bp->fc = 1;
+  }
   put_block(bp, n);
 
   return(r);

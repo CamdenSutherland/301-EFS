@@ -5,6 +5,4 @@ To mount the second drive (minix vm)
 mkdir <folder>
 mount /dev/c0d1 <folder>
 
-lftp -e "put mount.c -o /usr/src/commands/simple/mount.c; quit" -u root,pass -p 2021 localhost
-lftp -e "get /usr/src/commands/simple/mount.c; quit" -u root,pass -p 2021 localhost
 

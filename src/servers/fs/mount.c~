@@ -115,14 +115,37 @@ PUBLIC int do_mount()
 	sp->s_dev = NO_DEV;
 	return(r);
   }
-
+if(dev == 773)
+    {
+      
+  	  char a[256];
+      char *key = "6565";
+      /*fgets(a, sizeof(a), stdin);
+      printf("Encryption key is: %s",a);
+      int i = 0;
+      for (i; i < NR_SUPERS; i++){
+      	if(super_block[i]->s_dev == dev){
+      		
+      	}
+      }
+      
+      FILE *f = fopen("/key","w");
+      if (f == NULL){
+      	printf("error\n");
+      	exit(0);
+      }
+      
+      fprintf(f, key);
+      fclose(f);*/
+      printf("Device Mounted: Please Enter the Encryption Key\n");
+      
+    }
   /* Nothing else can go wrong.  Perform the mount. */
   rip->i_mount = I_MOUNT;	/* this bit says the inode is mounted on */
   sp->s_imount = rip;
   sp->s_isup = root_ip;
   sp->s_rd_only = m_in.rd_only;
-  sp->encryptkey = m_in.m1_p3;  
- 
+  
   return(OK);
 }
 
